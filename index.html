@@ -1,0 +1,99 @@
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="https://www.iconsdb.com/favicon.ico">
+
+<script src="https://unpkg.com/vue@3"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<style>
+body,h1 {font-family: "Raleway", sans-serif}
+body, html {height: 100%}
+.bgimg {
+  background-image: url('https://www.w3schools.com/w3images/forestbridge.jpg');
+  min-height: 100%;
+  background-position: center;
+  background-size: cover;
+}
+</style>
+ 
+
+<div id="app">  
+
+<div class="bgimg w3-display-container w3-animate-opacity w3-text-white">
+
+  <div class="w3-display-topleft w3-padding-large w3-xlarge">
+    <!-- TOMAS --> <div v-if="loaded == true">{{ infos.author }} </div> <div v-else> . . . </div> 
+  </div>
+  <div class="w3-display-middle">
+
+    <h1 v-if="loaded" class="w3-animate-top"> {{ infos.text }} </h1>
+    <h1 v-if="loaded == false" class="w3-animate-top"> . . . . . . . . . </h1>
+
+    <hr class="w3-border-grey" style="margin:auto;width:40%"> 
+
+  </div>
+  <div class="w3-display-bottomleft w3-padding-large">
+    <button @click="backFacts" :disabled="currentPage == 0" > BACK </button>
+    <button @click="nextFacts"> NEXT </button>
+  </div>
+</div>
+
+
+
+
+</div>
+
+<script>
+  Vue.createApp({
+    data() {
+      return {
+        num: 0,
+        currentPage: 0,
+        infos: [],
+        loaded: false
+      }
+    }, 
+    methods: {
+        increment(){
+            this.num++
+        },
+        decrement(){
+            if(!this.num <= 0){                
+                this.num--
+            }
+        },
+        getFacts(){
+           axios.get("https://type.fit/api/quotes")
+                .then(response => {
+                   this.infos = response.data[this.currentPage] ;
+                   this.loaded = true
+                }) 
+             
+        },
+         
+        nextFacts(){
+            this.loaded = false
+            this.currentPage++;
+            this.getFacts()
+
+        },
+
+        backFacts(){
+            this.loaded = false 
+            if(!this.currentPage == 0){                
+                this.currentPage--;
+                this.getFacts()
+            } 
+        }
+ 
+    },
+    mounted() { 
+        this.getFacts()
+    }
+
+  }).mount('#app')
+</script>
+
+
+
