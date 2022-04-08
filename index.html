@@ -23,11 +23,11 @@ body, html {height: 100%}
 <div class="bgimg w3-display-container w3-animate-opacity w3-text-white">
 
   <div class="w3-display-topleft w3-padding-large w3-xlarge">
-    <!-- TOMAS --> <div v-if="loaded == true">{{ infos.author }} </div> <div v-else> . . . </div> 
+    <!-- TOMAS --> <div v-if="loaded == true">{{ info.author }} </div> <div v-else> . . . </div> 
   </div>
   <div class="w3-display-middle">
 
-    <h1 v-if="loaded" class="w3-animate-top"> {{ infos.text }} </h1>
+    <h1 v-if="loaded" class="w3-animate-top"> {{ info.text }} </h1>
     <h1 v-if="loaded == false" class="w3-animate-top"> . . . . . . . . . </h1>
 
     <hr class="w3-border-grey" style="margin:auto;width:40%"> 
@@ -50,7 +50,8 @@ body, html {height: 100%}
       return {
         num: 0,
         currentPage: 0,
-        infos: [],
+        infos: [], 
+        info: [],
         loaded: false
       }
     }, 
@@ -66,7 +67,8 @@ body, html {height: 100%}
         getFacts(){
            axios.get("https://type.fit/api/quotes")
                 .then(response => {
-                   this.infos = response.data[this.currentPage] ;
+                   this.infos = response.data ;
+                   this.info = this.infos[this.currentPage]
                    this.loaded = true
                 }) 
              
@@ -74,16 +76,17 @@ body, html {height: 100%}
          
         nextFacts(){
             this.loaded = false
-            this.currentPage++;
-            this.getFacts()
-
+            this.currentPage = this.currentPage + 1
+            this.info = this.infos[this.currentPage] 
+            this.loaded = true
         },
 
         backFacts(){
             this.loaded = false 
-            if(!this.currentPage == 0){                
-                this.currentPage--;
-                this.getFacts()
+            if(!this.currentPage == 0){         
+                this.currentPage = this.currentPage - 1
+                this.info = this.infos[this.currentPage]
+                this.loaded = true
             } 
         }
  
