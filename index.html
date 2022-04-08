@@ -2,9 +2,11 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" href="https://www.iconsdb.com/favicon.ico">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <script src="https://unpkg.com/vue@3"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<title>Quotes</title>
 
 <style>
 body,h1 {font-family: "Raleway", sans-serif}
@@ -27,15 +29,21 @@ body, html {height: 100%}
   </div>
   <div class="w3-display-middle">
 
-    <h1 v-if="loaded" class="w3-animate-top"> {{ info.text }} </h1>
-    <h1 v-if="loaded == false" class="w3-animate-top"> . . . . . . . . . </h1>
+    <h1 class="w3-animate-top">
+        <div v-if="loaded" >{{ info.text }}</div> 
+        <div v-if="loaded == false"> . . . . . . . </div>
+    </h1>
+
+
+    <!-- <h1 v-if="loaded == false" class="w3-animate-top"> . . . . . . . . . </h1> -->
 
     <hr class="w3-border-grey" style="margin:auto;width:40%"> 
 
   </div>
-  <div class="w3-display-bottomleft w3-padding-large">
-    <button @click="backFacts" :disabled="currentPage == 0" > BACK </button>
-    <button @click="nextFacts"> NEXT </button>
+  <div class="w3-display-bottomright w3-padding-large">
+    <!-- <button @click="backFacts" :disabled="currentPage == 0" > BACK </button> -->
+    <button @click="getRandom" class="w3-button w3-green w3-round-large"> Next <i class="fa fa-arrow-right"></i> </button>
+    <!-- <button @click="nextFacts"> NEXT </button> -->
   </div>
 </div>
 
@@ -49,7 +57,7 @@ body, html {height: 100%}
     data() {
       return {
         num: 0,
-        currentPage: 0,
+        currentPage: Math.floor((Math.random() * 1642) + 1),
         infos: [], 
         info: [],
         loaded: false
@@ -72,15 +80,13 @@ body, html {height: 100%}
                    this.loaded = true
                 }) 
              
-        },
-         
+        },         
         nextFacts(){
             this.loaded = false
             this.currentPage = this.currentPage + 1
             this.info = this.infos[this.currentPage] 
             this.loaded = true
         },
-
         backFacts(){
             this.loaded = false 
             if(!this.currentPage == 0){         
@@ -88,11 +94,16 @@ body, html {height: 100%}
                 this.info = this.infos[this.currentPage]
                 this.loaded = true
             } 
+        },
+        getRandom(){
+            this.currentPage = Math.floor((Math.random() * 1642) + 1)
+            this.nextFacts()
         }
  
     },
     mounted() { 
         this.getFacts()
+        console.log(this.currentPage)
     }
 
   }).mount('#app')
