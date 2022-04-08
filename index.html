@@ -30,9 +30,9 @@ body, html {height: 100%}
   </div>
   <div class="w3-display-middle">
 
-    <div class="w3-animate-top w3-xlarge">
-        <div v-if="loaded" >{{ info.text }}</div> 
-        <div v-if="loaded == false"> . . . . . . . </div>
+    <div class="w3-animate-top">
+        <div v-if="loaded" class="w3-xlarge">{{ info.text }}</div> 
+        <div v-if="loaded == false" class="w3-xlarge"> . . . . . . . </div>
     </div>
 
 
